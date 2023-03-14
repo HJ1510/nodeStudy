@@ -1,6 +1,8 @@
-const http = require("http");
+let url = new URL(
+  "https://www.google.com/webhp?hl=ko&sa=X&ved=0ahUKEwjIlczz9tr9AhUHpVYBHZ8vBrYQPAgI"
+);
 
-let server = http.createServer(function (request, response) {
-  response.end("<h1>HI!!</h1>");
-});
-server.listen(5000);
+console.log(url.protocol);
+console.log(url.host);
+console.log(url.pathname);
+console.log(url.search);

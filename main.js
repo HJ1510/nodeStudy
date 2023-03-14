@@ -1,38 +1,12 @@
-// const fs = require("fs");
+const EventEmitter = require("events");
+const myEmitter = new EventEmitter();
 
-// // console.log("Start");
+const person = { name: "dooly", age: 8, gender: "male" };
 
-// // let content = fs.readFileSync("./new", "utf8");
-// // console.log(content);
+myEmitter.on("start", (info) => {
+  console.log(info);
+  console.log(info.name);
+  console.log(info.gender);
+});
 
-// // console.log("Finish");
-
-// console.log("Start");
-
-// fs.readFile("./new", "utf8", (error, data) => {
-//   console.log(data);
-// });
-
-// console.log("Finish");
-
-// const EventEmitter = require("events");
-
-// const myEmitter = new EventEmitter();
-
-// const cbArr = [];
-
-// cbArr[0] = () => {
-//   console.log("A");
-// };
-
-// cbArr[1] = () => {
-//   console.log("B");
-// };
-
-// myEmitter.on("test", cbArr[0]);
-// myEmitter.on("test", cbArr[1]);
-
-// myEmitter.off("test", cbArr[0]);
-// myEmitter.off("test", cbArr[1]);
-
-// myEmitter.emit("test");
+myEmitter.emit("start", person);

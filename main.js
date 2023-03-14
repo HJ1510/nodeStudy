@@ -1,12 +1,6 @@
-const EventEmitter = require("events");
-const myEmitter = new EventEmitter();
+const http = require("http");
 
-const person = { name: "dooly", age: 8, gender: "male" };
-
-myEmitter.on("start", (info) => {
-  console.log(info);
-  console.log(info.name);
-  console.log(info.gender);
+let server = http.createServer(function (request, response) {
+  response.end("<h1>HI!!</h1>");
 });
-
-myEmitter.emit("start", person);
+server.listen(5000);

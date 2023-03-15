@@ -17,3 +17,7 @@ console.log(Object.entries(newInfo));
 for (const property in newInfo) {
   console.log(property);
 }
+
+for (const property in newInfo) {
+  console.log(`Key: ${property} => Value: ${newInfo[property]}`);
+}

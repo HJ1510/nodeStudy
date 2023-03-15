@@ -6,6 +6,11 @@ let members = require('./members');
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(req.query);
+  next();
+});
+
 app.get('/api/members', (req, res) => {
   const { team } = req.query;
   if (team) {
@@ -15,6 +20,17 @@ app.get('/api/members', (req, res) => {
     res.send(members);
   }
 });
+
+// app.get('/api/members', async (req, res) => {
+//   const { team } = req.query;
+//   if (team) {
+//     const teamMembers = await Member.findAll({ where: { team } });
+//     res.send(teamMembers);
+//   } else {
+//     const members = await Member.findAll();
+//     res.send(members);
+//   }
+// });
 
 app.get('/api/members/:id', (req, res) => {
   // const id = req.params.id;

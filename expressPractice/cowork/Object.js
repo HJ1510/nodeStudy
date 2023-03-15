@@ -10,6 +10,10 @@ const newInfo = {
   profileImage: 'profile11.png',
 };
 
+console.log(Object.keys(newInfo));
+
+console.log(Object.entries(newInfo));
+
 for (const property in newInfo) {
-  console.log(`Key: ${property} => Value: ${newInfo[property]}`);
+  console.log(property);
 }

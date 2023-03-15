@@ -6,10 +6,10 @@ let members = require('./members');
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  console.log(req.query);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(req.query);
+//   next();
+// });
 
 app.get('/api/members', (req, res) => {
   const { team } = req.query;
@@ -35,8 +35,9 @@ app.get('/api/members', (req, res) => {
 app.get('/api/members/:id', (req, res) => {
   // const id = req.params.id;
   const { id } = req.params;
-  const member = members.find((m) => m.id === Number(id));
-  if (member) {
+  const membersCount = members.length;
+  members = members.filter((member) => member.id === Number(id));
+  if (members.length < membersCount) {
     res.send(member);
   } else {
     res.status(404).send({ message: 'There is no such employee' });
@@ -53,13 +54,24 @@ app.put('/api/members/:id', (req, res) => {
   const { id } = req.params;
   const newInfo = req.body;
   const member = members.find((m) => m.id === Number(id));
-  if(member) {
+  if (member) {
     Object.keys(newInfo).forEach((prop) => {
       member[prop] = newInfo[prop];
     });
     res.send(member);
-  }else {
-    res.status(404).send({ message: 'There is no such employee' })
+  } else {
+    res.status(404).send({ message: 'There is no such employee' });
+  }
+});
+
+app.delete('/api/members/:id', (req, res) => {
+  const { id } = req.params;
+  const membersCount = members.length;
+  members = members.filter((member) => member.id !== Number(id));
+  if (members.length < membersCount) {
+    res.send({ message: 'Deleted' });
+  } else {
+    res.status(404).send({ message: 'There is no such employee' });
   }
 });
 

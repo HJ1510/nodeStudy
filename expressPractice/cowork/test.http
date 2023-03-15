@@ -33,3 +33,6 @@ Content-Type:application/json
   "id": 2,
   "phoneNumber": "010-xxxx-0000"
 }
+
+###
+DELETE http://localhost:5000/api/members/2

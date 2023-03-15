@@ -24,3 +24,12 @@ Content-Type:application/json
   "birthday": "1992/03/26",
   "profileImage": "profile2.png" 
 }
+
+###
+PUT http://localhost:5000/api/members/2
+Content-Type:application/json
+
+{
+  "id": 2,
+  "phoneNumber": "010-xxxx-0000"
+}

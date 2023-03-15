@@ -49,6 +49,20 @@ app.post('/api/members', (req, res) => {
   res.send(newMember);
 });
 
+app.put('/api/members/:id', (req, res) => {
+  const { id } = req.params;
+  const newInfo = req.body;
+  const member = members.find((m) => m.id === Number(id));
+  if(member) {
+    Object.keys(newInfo).forEach((prop) => {
+      member[prop] = newInfo[prop];
+    });
+    res.send(member);
+  }else {
+    res.status(404).send({ message: 'There is no such employee' })
+  }
+});
+
 app.listen(5000, () => {
   console.log('server is listening...');
 });

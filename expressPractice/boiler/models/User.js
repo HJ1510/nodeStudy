@@ -74,7 +74,7 @@ userSchema.methods.comparePassword = function (plainPassword, cb) {
 userSchema.methods.generateToken = function (cb) {
   var user = this;
   // jsonwebtoken으로 토큰 생성 sign()
-  var token = jwt.sign(user._id.toHexString(), 'secretToken'); // secretToken은 다른 이름이어도 됨
+  var token = jwt.sign(user._id.toString(), 'secretToken'); // secretToken은 다른 이름이어도 됨
   // user._id + 'secretToken' = token
   // ->
   // 'secretToken' -> user._id

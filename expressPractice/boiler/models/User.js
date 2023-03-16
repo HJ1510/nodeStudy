@@ -96,10 +96,18 @@ userSchema.statics.findByToken = function (token, cb) {
     // 유저 아이디를 이용해서 유저 찾고
     // 클라이언트에서 가져온 token과 DB에 보관된 token을 비교
     // findOne() mongoDB지원
-    user.findOne({ _id: decoded, token: token }).then((err) => {
-      if (err) return cb(err);
-      cb(null, user);
-    });
+    user
+      .findOne({ _id: decoded, token: token })
+      .then((user) => {
+        if (!user) return Promise.reject('유저를 찾을 수 없습니다.');
+        return Promise.resolve(user);
+      })
+      .then((user) => {
+        cb(null, user);
+      })
+      .catch((err) => {
+        cb(err);
+      });
   });
 };
 

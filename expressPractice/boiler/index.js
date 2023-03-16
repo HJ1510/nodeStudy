@@ -4,7 +4,7 @@ const port = 5000;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const config = require('./config/keys');
-
+const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
 
 // application/x-www-form-urlencoded
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!!!!');
 });
 
-app.post('/register', (req, res) => {
+app.post('/api/users/register', (req, res) => {
   // 회원가입시 필요한 정보를 클라이언트에서 가져오고
   // 그 정보를 데이터베이스에 삽입
   const user = new User(req.body);
@@ -42,7 +42,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-app.post('/login', (req, res) => {
+app.post('/api/users/login', (req, res) => {
   User.findOne({ email: req.body.email })
     // 1. 요청된 이메일을 데이터베이스에서 찾음
     // findOne() mongodb 지원
@@ -77,6 +77,19 @@ app.post('/login', (req, res) => {
     .catch((err) => {
       return res.status(400).send(err);
     });
+});
+
+app.get('/api/users/auth', auth, (req, res) => {
+  // 여기에 진입했다는 것은 auth 미들웨어를 통과해서 인증을 마쳤다는 의미
+  res.status(200).json({
+    _id: req.user._id, // auth에서 req.user = user; 했기때문에 가능
+    isAdmin: req.user.roll === 0 ? false : true, // role = 0 일반유저 그외에는 관리자로 설정했을때
+    isAuth: true,
+    email: req.user.email,
+    nickname: req.user.nickname,
+    role: req.user.role,
+    img: req.user.img,
+  });
 });
 
 app.listen(port, () => {

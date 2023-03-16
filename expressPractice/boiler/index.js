@@ -92,6 +92,45 @@ app.get('/api/users/auth', auth, (req, res) => {
   });
 });
 
+// // name을 기준으로 회원정보 수정
+// app.put('/api/users/:name', auth, (req, res) => {
+//   User.findOneAndUpdate({ name: req.params.name }, req.body, { new: true })
+//     .then((user) => {
+//       res.status(200).json({
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         nickname: user.nickname,
+//         role: user.role,
+//         img: user.img,
+//       });
+//     })
+//     .catch((err) => {
+//       res.json({ success: false, err });
+//     });
+// });
+
+// _id를 기준으로 회원정보수정(일반적)
+// findByIdAndUpdate() mongoose 지원
+// req.params.id가 string으로 넘어가도 Mongoose에서 자동으로 ObjectId로 변환하여 DB에서 검색
+app.put('/api/users/:id', auth, (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((user) => {
+      res.status(200).json({
+        _id: user._id,
+        isAdmin: user.role === 0 ? false : true,
+        isAuth: true,
+        email: user.email,
+        nickname: user.nickname,
+        role: user.role,
+        img: user.img,
+      });
+    })
+    .catch((err) => {
+      res.json({ success: false, err });
+    });
+});
+
 app.get('/api/users/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }) // auth에서 req.user = user; 했기때문에 가능
     .then(() => {

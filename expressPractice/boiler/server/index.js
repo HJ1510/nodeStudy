@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const config = require('./config/keys');
 const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
+const { Meeting } = require('./models/Study');
 
 // application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -135,6 +136,40 @@ app.get('/api/users/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }) // auth에서 req.user = user; 했기때문에 가능
     .then(() => {
       return res.status(200).send({ success: true });
+    })
+    .catch((err) => {
+      return res.json({ success: false, err });
+    });
+});
+
+app.post('/api/meeting/create', (req, res) => {
+  // 모임 생성에 필요한 정보를 클라이언트에서 가져오고
+  // 그 정보를 데이터베이스에 삽입
+  const meeting = new Meeting(req.body);
+  // meeting모델에 정보가 저장되고 실패시 에러메세지 출력
+  meeting
+    .save()
+    .then(() => {
+      res.status(200).json({
+        success: true,
+      });
+    })
+    .catch((err) => {
+      return res.json({ success: false, err });
+    });
+});
+
+app.get('/api/meeting/all', (req, res) => {
+  Meeting.find({})
+    .then((meetings) => {
+      const transformedMeetings = meetings.map((meeting) => {
+        return {
+          ...meeting._doc,
+          firstDate: new Date(meeting.firstDate).toISOString().substring(0, 10),
+        };
+        // toISOString() ISO 8601 형식의 문자열로 변환: 이 문자열은 "YYYY-MM-DDTHH:mm:ss.sssZ" 형식
+      });
+      res.status(200).json({ success: true, meetings: transformedMeetings });
     })
     .catch((err) => {
       return res.json({ success: false, err });

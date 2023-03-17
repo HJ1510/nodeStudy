@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      maxlength: 50,
+      maxLength: 50,
     },
     email: {
       type: String,
@@ -17,7 +17,6 @@ const userSchema = mongoose.Schema(
     },
     nickname: {
       type: String,
-      maxlength: 50,
     },
     password: {
       type: String,
@@ -27,11 +26,17 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ['female', 'male'],
     },
+    regDate: {
+      type: Date,
+    },
     role: {
       type: Number,
       default: 0,
     },
-    img: String,
+    img: {
+      data: Buffer,
+      contentType: String,
+    },
     token: {
       type: String,
     },

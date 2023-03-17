@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const meetingSchema = mongoose.Schema(
   {
+    autoIncrementField: { type: Number, default: 0 },
     title: {
       type: String,
       // required: true,
@@ -66,6 +67,17 @@ const meetingSchema = mongoose.Schema(
   },
   { timestamp: true }
 );
+
+meetingSchema.pre('save', async function (next) {
+  const doc = this;
+  const lastDoc = await Meeting.findOne().sort({ autoIncrementField: -1 });
+  if (lastDoc && lastDoc.autoIncrementField) {
+    doc.autoIncrementField = lastDoc.autoIncrementField + 1;
+  } else {
+    doc.autoIncrementField = 1;
+  }
+  next();
+});
 
 const Meeting = mongoose.model('Study', meetingSchema);
 

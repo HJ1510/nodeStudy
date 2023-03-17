@@ -10,7 +10,7 @@ function LandingPage() {
 
   return (
     <div>
-      <div>LandingPage</div>
+      <div>시작페이지</div>
       <p>{data}</p>
     </div>
   );

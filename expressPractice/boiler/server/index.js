@@ -8,6 +8,7 @@ const upload = multer();
 const config = require('./config/keys');
 const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
+const { Meeting } = require('./models/Study');
 
 // application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -161,11 +162,10 @@ app.post('/api/meeting/create', upload.none(), (req, res) => {
       });
     })
     .catch((err) => {
+      console.log(err);
       return res.json({ success: false, err });
     });
 });
-
-const { Meeting } = require('./models/Study');
 
 app.get('/api/meeting/all', (req, res) => {
   Meeting.find({})
@@ -180,6 +180,7 @@ app.get('/api/meeting/all', (req, res) => {
       res.status(200).json({ success: true, meetings: transformedMeetings });
     })
     .catch((err) => {
+      console.log(err);
       return res.json({ success: false, err });
     });
 });

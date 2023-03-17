@@ -57,7 +57,7 @@ const meetingSchema = mongoose.Schema(
       // required: true,
     },
     firstDate: {
-      type: Date,
+      type: String,
       // required: true,
     },
     imgFile: {

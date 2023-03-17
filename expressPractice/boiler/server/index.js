@@ -3,10 +3,11 @@ const app = express();
 const port = 5000;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const upload = multer();
 const config = require('./config/keys');
 const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
-const { Meeting } = require('./models/Study');
 
 // application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -146,11 +147,12 @@ app.get('/api/users/logout', auth, (req, res) => {
     });
 });
 
-app.post('/api/meeting/create', (req, res) => {
+app.post('/api/meeting/create', upload.none(), (req, res) => {
   // 모임 생성에 필요한 정보를 클라이언트에서 가져오고
   // 그 정보를 데이터베이스에 삽입
   const meeting = new Meeting(req.body);
   // meeting모델에 정보가 저장되고 실패시 에러메세지 출력
+  console.log(req.body);
   meeting
     .save()
     .then(() => {
@@ -162,6 +164,8 @@ app.post('/api/meeting/create', (req, res) => {
       return res.json({ success: false, err });
     });
 });
+
+const { Meeting } = require('./models/Study');
 
 app.get('/api/meeting/all', (req, res) => {
   Meeting.find({})
